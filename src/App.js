@@ -1,23 +1,46 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { useState } from "react";
 
 function App() {
+  const [codigo, setCodigo] = useState({
+    codigo: '',
+    respuesta:'',
+  });
+
+  function consumir(){
+    fetch('https://codebreaker-backend-deutsch.herokuapp.com/juego', {
+      method: 'POST',
+      body: JSON.stringify(codigo),
+    })
+    .then(res => res.json())
+    .then(data => {
+      setCodigo({
+        codigo: codigo.codigo,
+        respuesta: data.respuesta,
+      });
+    }).catch(err => console.log(err));
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <form>
+        <label>
+          Entre el codigo : 
+          <input
+          type={'number'}
+          name='codigo'
+          placeholder='Tu codigo'
+          value={codigo.codigo}
+          onChange={(e) => {
+            setCodigo({ ...codigo, codigo: e.target.value });
+          }}
+        />
+        </label>
+        <label className="App">
+          {codigo.respuesta}
+        </label>
+        <input type="submit" value="Submit" onSubmit={consumir()} />
+      </form>
     </div>
   );
 }
