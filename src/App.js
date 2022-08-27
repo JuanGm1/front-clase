@@ -1,16 +1,18 @@
 import "./App.css";
 import { useState } from "react";
 
+
 function App() {
   const [codigo, setCodigo] = useState({
     codigo: '',
     respuesta:'',
   });
 
-  function consumir(){
+ async function consumir(){
     fetch('https://codebreaker-backend-deutsch.herokuapp.com/juego', {
       method: 'POST',
-      body: JSON.stringify(codigo),
+      body: JSON.stringify(codigo.codigo),
+      headers: { 'Content-Type': 'application/json' },
     })
     .then(res => res.json())
     .then(data => {
